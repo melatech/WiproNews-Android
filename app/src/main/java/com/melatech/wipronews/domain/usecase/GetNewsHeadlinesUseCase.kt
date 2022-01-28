@@ -8,7 +8,7 @@ import com.melatech.wipronews.domain.repository.NewsRepository
  *created by Jason Junior Calvert on 26/01/2022.
  */
 class GetNewsHeadlinesUseCase(private val newsRepository: NewsRepository) {
-    suspend fun execute(): Resource<APIResponse>{
-        return newsRepository.getNewsHeadlines_repo()
+    suspend fun execute(country: String, page:Int): Resource<APIResponse>{
+        return newsRepository.getNewsHeadlines_repo(country, page)
     }
 }

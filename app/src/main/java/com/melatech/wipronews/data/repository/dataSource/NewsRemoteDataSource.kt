@@ -9,5 +9,5 @@ import retrofit2.Response
 interface NewsRemoteDataSource {
     //This function will communicate with the api
     //and return a Retrofit Response object
-    suspend fun getTopHeadlines_rds(): Response<APIResponse>
+    suspend fun getTopHeadlines_rds(country: String, page:Int): Response<APIResponse>
 }

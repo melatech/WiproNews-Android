@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface NewsRepository {
 
     //These 2 functions are for network communications
-    suspend fun getNewsHeadlines_repo(): Resource<APIResponse>
+    suspend fun getNewsHeadlines_repo(country: String, page:Int): Resource<APIResponse>
     suspend fun getSearchedNews_repo(searchQuery: String): Resource<APIResponse>
 
     //These 3 functions are for local database communications
