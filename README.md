@@ -1,2 +1,2 @@
-#WiproNews
-###This is an android technical assignment for Wipro
+# WiproNews
+### This is an android technical assignment for Wipro
