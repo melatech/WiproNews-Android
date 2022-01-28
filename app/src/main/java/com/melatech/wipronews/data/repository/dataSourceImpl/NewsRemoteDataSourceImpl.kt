@@ -11,11 +11,8 @@ import retrofit2.Response
 //This class is the implementation of the NewsRemoteDataSource interface
 class NewsRemoteDataSourceImpl(
     private val newsAPIService: NewsAPIService,
-    private val country: String,
-    private val page: Int,
-
 ): NewsRemoteDataSource {
-    override suspend fun getTopHeadlines_rds(): Response<APIResponse> {
+    override suspend fun getTopHeadlines_rds(country: String, page: Int): Response<APIResponse> {
         return newsAPIService.getTopHeadlines_service(country, page)
     }
 }
