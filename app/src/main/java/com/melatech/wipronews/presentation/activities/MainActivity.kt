@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.melatech.wipronews.R
 import com.melatech.wipronews.databinding.ActivityMainBinding
+import com.melatech.wipronews.presentation.adapter.NewsAdapter
 import com.melatech.wipronews.presentation.viewmodel.NewsViewModel
 import com.melatech.wipronews.presentation.viewmodel.NewsViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     //use di to inject ViewModelFactory
     @Inject
     lateinit var factory: NewsViewModelFactory
+    @Inject
+    lateinit var newsAdapter: NewsAdapter
     //shared ViewModel
     lateinit var viewModel: NewsViewModel
 
