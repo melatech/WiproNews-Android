@@ -2,6 +2,7 @@ package com.melatech.wipronews.presentation.di
 
 import com.melatech.wipronews.domain.repository.NewsRepository
 import com.melatech.wipronews.domain.usecase.GetNewsHeadlinesUseCase
+import com.melatech.wipronews.domain.usecase.GetSearchedNewsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,5 +23,13 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ): GetNewsHeadlinesUseCase{
         return GetNewsHeadlinesUseCase(newsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetNewsSearchUseCase(
+        newsRepository: NewsRepository
+    ): GetSearchedNewsUseCase{
+        return GetSearchedNewsUseCase(newsRepository)
     }
 }

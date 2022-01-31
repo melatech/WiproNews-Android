@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WiproNews</string>
+    <string name="app_name">WiproNews by Jason J Calvert</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="news_fragment">News Fragment</string>

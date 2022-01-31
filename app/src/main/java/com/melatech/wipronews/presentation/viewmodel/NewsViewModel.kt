@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.melatech.wipronews.data.model.APIResponse
 import com.melatech.wipronews.data.util.Resource
 import com.melatech.wipronews.domain.usecase.GetNewsHeadlinesUseCase
+import com.melatech.wipronews.domain.usecase.GetSearchedNewsUseCase
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -20,9 +21,11 @@ import kotlinx.coroutines.launch
  */
 class NewsViewModel(
     private val app: Application,
-    private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+    private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+    private val getSearchedNewsUseCase: GetSearchedNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines_m: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
+    val searchedNews_m: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
 
     //Execute a network task
     fun getNewsHeadLines_v(country: String, page: Int) = viewModelScope.launch(IO) {
@@ -68,5 +71,24 @@ class NewsViewModel(
         }
         return true
     }
+
+    //search
+    fun searchNews_v(country: String, searchQuery: String, page: Int) = viewModelScope.launch(IO) {
+        searchedNews_m.postValue(Resource.Loading())
+        try {
+            if (isNetworkAvailable(app)){
+                //Get a successful response
+                val apiResult = getSearchedNewsUseCase.execute(country, searchQuery, page)
+                searchedNews_m.postValue(apiResult)
+            }else{
+                searchedNews_m.postValue(Resource.Error("Internet is not available"))
+            }
+        }catch (e: Exception){
+            searchedNews_m.postValue(Resource.Error(e.message.toString()))
+
+        }
+
+    }
+
 
 }

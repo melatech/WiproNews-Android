@@ -10,4 +10,5 @@ interface NewsRemoteDataSource {
     //This function will communicate with the api
     //and return a Retrofit Response object
     suspend fun getTopHeadlines_rds(country: String, page:Int): Response<APIResponse>
+    suspend fun getSearchedNews_rds(country: String, searchQuery: String, page:Int): Response<APIResponse>
 }

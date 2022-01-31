@@ -12,7 +12,7 @@ interface NewsRepository {
 
     //These 2 functions are for network communications
     suspend fun getNewsHeadlines_repo(country: String, page:Int): Resource<APIResponse>
-    suspend fun getSearchedNews_repo(searchQuery: String): Resource<APIResponse>
+    suspend fun getSearchedNews_repo(country: String, searchQuery: String, page:Int): Resource<APIResponse>
 
     //These 3 functions are for local database communications
     suspend fun saveNews_repo(article: Article)

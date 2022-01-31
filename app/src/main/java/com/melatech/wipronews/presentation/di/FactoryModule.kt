@@ -2,6 +2,7 @@ package com.melatech.wipronews.presentation.di
 
 import android.app.Application
 import com.melatech.wipronews.domain.usecase.GetNewsHeadlinesUseCase
+import com.melatech.wipronews.domain.usecase.GetSearchedNewsUseCase
 import com.melatech.wipronews.presentation.viewmodel.NewsViewModel
 import com.melatech.wipronews.presentation.viewmodel.NewsViewModelFactory
 import dagger.Module
@@ -22,11 +23,13 @@ class FactoryModule {
     @Singleton
     fun provideNewsViewModelFactory(
         app: Application,
-        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
-    ): NewsViewModelFactory{
+        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+        getSearchedNewsUseCase: GetSearchedNewsUseCase
+    ): NewsViewModelFactory {
         return NewsViewModelFactory(
             app,
-            getNewsHeadlinesUseCase
+            getNewsHeadlinesUseCase,
+            getSearchedNewsUseCase
         )
 
 

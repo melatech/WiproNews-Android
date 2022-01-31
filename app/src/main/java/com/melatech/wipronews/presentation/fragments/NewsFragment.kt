@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Adapter
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,10 @@ import com.melatech.wipronews.databinding.FragmentNewsBinding
 import com.melatech.wipronews.presentation.activities.MainActivity
 import com.melatech.wipronews.presentation.adapter.NewsAdapter
 import com.melatech.wipronews.presentation.viewmodel.NewsViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 /**
  *created by Jason Junior Calvert on 29/01/2022.
  */
@@ -61,6 +66,7 @@ class NewsFragment : Fragment() {
         }
         initRecyclerView()
         viewNewsList()
+        setSearchView()
     }
 
     private fun viewNewsList() {
@@ -148,5 +154,63 @@ class NewsFragment : Fragment() {
 
             }
         }
+    }
+
+    //search
+    private fun setSearchView(){
+        binding.svNews.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                viewModel.searchNews_v("us", p0.toString(), page)
+                viewSearchedNews()
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                MainScope().launch {
+                    delay(2000L)
+                    viewModel.searchNews_v("us", p0.toString(), page)
+                    viewSearchedNews()
+                }
+                return false
+            }
+        })
+        binding.svNews.setOnCloseListener(object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                initRecyclerView()
+                viewNewsList()
+                return false
+            }
+        })
+    }
+
+    fun viewSearchedNews(){
+       // viewModel.searchedNews_m(country, page)
+        viewModel.searchedNews_m.observe(viewLifecycleOwner, Observer { response ->
+            when(response){
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let {
+                        Log.e(TAG, "came here ${it.articles.toList().size}")
+                        newsAdapter.differ.submitList(it.articles.toList())
+                        if (it.totalResults % 20 == 0){
+                            pages = it.totalResults / 20
+                        }else{
+                            //pages++
+                            pages = it.totalResults / 20 + 1
+                        }
+                        isLastPage = page == pages
+                    }
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity, "An error has occurred: $it", Toast.LENGTH_LONG).show()
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
     }
 }
