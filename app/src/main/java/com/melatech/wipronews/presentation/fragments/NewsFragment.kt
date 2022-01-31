@@ -10,6 +10,7 @@ import android.widget.AbsListView
 import android.widget.Adapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.melatech.wipronews.R
@@ -49,6 +50,15 @@ class NewsFragment : Fragment() {
         //get viewModel from activity
         viewModel = (activity as MainActivity).viewModel
         newsAdapter = (activity as MainActivity).newsAdapter
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("selected_article", it)
+            }
+            findNavController().navigate(
+                R.id.action_newsFragment_to_infoFragment,
+                bundle
+            )
+        }
         initRecyclerView()
         viewNewsList()
     }
@@ -108,7 +118,6 @@ class NewsFragment : Fragment() {
             if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
                 isScrolling = true
         }
-
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = binding.rvNews.layoutManager as LinearLayoutManager
@@ -121,8 +130,6 @@ class NewsFragment : Fragment() {
             Log.e(TAG, "topPosition: ${topPosition}")
             Log.e(TAG, "page: ${page}")
             Log.e(TAG, "pages: ${pages}")
-
-
             //conditions to be satisfied before we can do pagination
             //1.on scrolling the currentList must reach last item
             val hasReachedToEnd = topPosition + visibleItems >= sizeOfCurrentList
