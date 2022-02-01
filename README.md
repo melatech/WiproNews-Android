@@ -1,3 +1,6 @@
-# WiproNews
+# WiproNews - MVVM clean Architecture
 
-## This is an android technical assignment for Wipro
+## Android technical assignment for Wipro
+
+This app shows a list of the latest news headlines taken from different websites around the internet.
+I have implemented an advance ### SearchView mechanism
