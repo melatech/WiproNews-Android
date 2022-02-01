@@ -1,4 +1,5 @@
-# WiproNews - MVVM clean Architecture by Jason J Calvert
+# WiproNews - MVVM clean Architecture
+### by Jason J Calvert
 
 ## Android technical assignment for Wipro
 
