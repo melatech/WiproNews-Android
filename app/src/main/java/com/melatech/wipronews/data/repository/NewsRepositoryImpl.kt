@@ -2,6 +2,7 @@ package com.melatech.wipronews.data.repository
 
 import com.melatech.wipronews.data.model.APIResponse
 import com.melatech.wipronews.data.model.Article
+import com.melatech.wipronews.data.repository.dataSource.NewsLocalDataSource
 import com.melatech.wipronews.data.repository.dataSource.NewsRemoteDataSource
 import com.melatech.wipronews.data.util.Resource
 import com.melatech.wipronews.domain.repository.NewsRepository
@@ -13,7 +14,8 @@ import retrofit2.Response
  */
 //This class is the implementation for the domain repository interface
 class NewsRepositoryImpl(
-    private val newsRemoteDataSource: NewsRemoteDataSource
+    private val newsRemoteDataSource: NewsRemoteDataSource,
+    private val newsLocalDataSource: NewsLocalDataSource
 ): NewsRepository {
     override suspend fun getNewsHeadlines_repo(country: String, page:Int): Resource<APIResponse> {
         return responseToResource(newsRemoteDataSource.getTopHeadlines_rds(country, page))
@@ -27,18 +29,16 @@ class NewsRepositoryImpl(
         return responseToResource(newsRemoteDataSource.getSearchedNews_rds(country, searchQuery, page))
     }
 
-
-
     override suspend fun saveNews_repo(article: Article) {
-        TODO("Not yet implemented")
+        newsLocalDataSource.saveArticleToDB_lds(article)
     }
 
     override suspend fun deleteNews_repo(article: Article) {
-        TODO("Not yet implemented")
+        newsLocalDataSource.deleteArticlesFromDB_lds(article)
     }
 
     override fun getSavedNews_repo(): Flow<List<Article>> {
-        TODO("Not yet implemented")
+        return newsLocalDataSource.getSavedArticles_lds()
     }
 
     private fun responseToResource(response: Response<APIResponse>): Resource<APIResponse>{

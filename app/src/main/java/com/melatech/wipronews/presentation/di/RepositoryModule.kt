@@ -1,6 +1,7 @@
 package com.melatech.wipronews.presentation.di
 
 import com.melatech.wipronews.data.repository.NewsRepositoryImpl
+import com.melatech.wipronews.data.repository.dataSource.NewsLocalDataSource
 import com.melatech.wipronews.data.repository.dataSource.NewsRemoteDataSource
 import com.melatech.wipronews.domain.repository.NewsRepository
 import dagger.Module
@@ -19,9 +20,14 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideNewsRepository(
-        newsRemoteDataSource: NewsRemoteDataSource
+        newsRemoteDataSource: NewsRemoteDataSource,
+        newsLocalDataSource: NewsLocalDataSource
+
     ): NewsRepository{
-        return NewsRepositoryImpl(newsRemoteDataSource)
+        return NewsRepositoryImpl(
+            newsRemoteDataSource,
+            newsLocalDataSource
+        )
 
     }
 }

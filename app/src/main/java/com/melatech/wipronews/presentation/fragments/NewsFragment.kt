@@ -167,7 +167,7 @@ class NewsFragment : Fragment() {
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 MainScope().launch {
-                    delay(2000L)
+                    delay(1000L)
                     viewModel.searchNews_v("us", p0.toString(), page)
                     viewSearchedNews()
                 }

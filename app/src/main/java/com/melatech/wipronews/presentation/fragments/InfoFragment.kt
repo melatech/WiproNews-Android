@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 
 import com.melatech.wipronews.R
 import com.melatech.wipronews.databinding.FragmentInfoBinding
+import com.melatech.wipronews.presentation.activities.MainActivity
+import com.melatech.wipronews.presentation.viewmodel.NewsViewModel
 
 /**
  *created by Jason Junior Calvert on 29/01/2022.
@@ -19,6 +22,7 @@ import com.melatech.wipronews.databinding.FragmentInfoBinding
 class InfoFragment : Fragment() {
 
     private lateinit var fragmentInfoBinding: FragmentInfoBinding
+    private lateinit var viewModel: NewsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,13 +38,20 @@ class InfoFragment : Fragment() {
 
         val args: InfoFragmentArgs by navArgs()
         val article = args.selectedArticle
+
+        viewModel = (activity as MainActivity).viewModel
+
         fragmentInfoBinding.wvInfo.apply {
             webViewClient = WebViewClient()
-            if(article.url != ""){
+            if(article.url != null){
                 loadUrl(article.url)
             }
+        }
+        fragmentInfoBinding.fabSave.setOnClickListener {
+            viewModel.saveArticle_v(article)
+            //return inserted row id
+            Snackbar.make(view, "Saved Successfully!", Snackbar.LENGTH_LONG).show()
 
         }
-
     }
 }

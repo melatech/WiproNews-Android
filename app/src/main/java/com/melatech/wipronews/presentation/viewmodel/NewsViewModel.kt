@@ -7,12 +7,14 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.melatech.wipronews.data.model.APIResponse
+import com.melatech.wipronews.data.model.Article
 import com.melatech.wipronews.data.util.Resource
-import com.melatech.wipronews.domain.usecase.GetNewsHeadlinesUseCase
-import com.melatech.wipronews.domain.usecase.GetSearchedNewsUseCase
+import com.melatech.wipronews.domain.usecase.*
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -22,7 +24,11 @@ import kotlinx.coroutines.launch
 class NewsViewModel(
     private val app: Application,
     private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
-    private val getSearchedNewsUseCase: GetSearchedNewsUseCase
+    private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
+    private val saveNewsUseCase: SaveNewsUseCase,
+    private val getSavedNewsUseCase: GetSavedNewsUseCase,
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
+
 ) : AndroidViewModel(app) {
     val newsHeadLines_m: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
     val searchedNews_m: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
@@ -85,8 +91,23 @@ class NewsViewModel(
             }
         }catch (e: Exception){
             searchedNews_m.postValue(Resource.Error(e.message.toString()))
-
         }
+    }
+
+    //local data
+
+    fun saveArticle_v(article: Article) = viewModelScope.launch(IO) {
+        saveNewsUseCase.execute(article)
+    }
+
+    fun getSavedNews_v() = liveData {
+        getSavedNewsUseCase.execute().collect {
+            emit(it)
+        }
+    }
+
+    fun deleteArticle_v(article: Article) = viewModelScope.launch(IO) {
+        deleteSavedNewsUseCase.execute(article)
 
     }
 
